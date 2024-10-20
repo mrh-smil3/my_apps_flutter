@@ -3,6 +3,67 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
 import 'register_screen.dart';
 
+class SplashScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Tambahkan delay jika diperlukan
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                HomePage()), // Ganti dengan halaman yang sesuai
+      );
+    });
+
+    return Scaffold(
+      body: Center(
+        child: Image.asset('assets/logo.png'), // Logo kustom
+      ),
+    );
+  }
+}
+
+// Kelas HomePage (ganti sesuai dengan halaman utama Anda)
+// class HomePage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text('Home')),
+//       body: Center(child: Text('Selamat datang di halaman utama!')),
+//     );
+//   }
+// }
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Selamat datang di halaman utama gan!'),
+            SizedBox(height: 20), // Spasi antara teks dan tombol
+            ElevatedButton(
+              onPressed: () {
+                // Logika untuk logout
+                // Misalnya, menghapus token atau status pengguna
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
+              child: Text('Logout'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class LoginScreen extends ConsumerStatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -70,6 +131,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       await ref
           .read(authProvider.notifier)
           .login(emailController.text, passwordController.text);
+
+      // Setelah login berhasil, navigasi ke SplashScreen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SplashScreen()),
+      );
     } catch (e) {
       setState(() {
         errorMessage = e.toString();
